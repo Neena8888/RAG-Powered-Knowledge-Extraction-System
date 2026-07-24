@@ -4,13 +4,13 @@ A production-ready data collection, sanitization, and quality validation pipelin
 
 ---
 
-## 📌 Project Overview
+## Project Overview
 
 This repository contains the complete implementation for Week 1, focusing on acquiring a large-scale real-world technical dataset (5,000+ records), implementing robust text cleaning logic for edge cases, validating data quality, and exporting a clean dataset ready for chunking and embedding.
 
 ---
 
-## 🎯 Week 1 Objectives & Deliverables Completed
+## Week 1 Objectives & Deliverables Completed
 
 - **Environment Setup & Verification:** Installed required packages (`pandas`, `numpy`, `requests`, `tqdm`, `datasets`, `pytest`) and created a verification script (`src/utils.py`) to test imports and core library functionality.
 - **Large Data Acquisition:** Developed a bulk fetching engine (`fetch_data.py`) utilizing the Wikipedia MediaWiki API and stream concepts to acquire **5,100 real-world technical documents** across core Computer Science domains. Validated data for encoding issues and null values.
@@ -20,7 +20,7 @@ This repository contains the complete implementation for Week 1, focusing on acq
 
 ---
 
-## 💡 Technical Approach & Methodology
+## Technical Approach & Methodology
 
 1. **Environment Verification:** Implemented functional sanity checks for core dependencies (`pandas`, `datasets`, `pytest`) before data processing to ensure runtime stability.
 2. **API Ingestion Engine:** Queried Wikipedia API across high-density technology domains (AI, Machine Learning, Cybersecurity, Databases) in bulk batches to collect over 5,000 unique records dynamically.
@@ -33,7 +33,7 @@ This repository contains the complete implementation for Week 1, focusing on acq
 
 ---
 
-## 📊 Data Quality Report Summary
+## Data Quality Report Summary
 
 | Metric / Parameter | Value / Status |
 | :--- | :--- |
@@ -45,7 +45,7 @@ This repository contains the complete implementation for Week 1, focusing on acq
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 .
