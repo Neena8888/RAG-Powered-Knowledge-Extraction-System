@@ -1,54 +1,65 @@
-# Data Ingestion, Chunking & Vector Search Engine
+# Data Ingestion, Vector Search & RAG Generation Pipeline
 
-A production-ready data collection, recursive chunking, embedding generation, and ChromaDB vector search engine built for Parallax Labs Internship.
+A production-ready Retrieval-Augmented Generation (RAG) system built with OpenRouter API integration, custom prompt engineering, API error handling, hallucination guardrails, and latency logging for Parallax Labs Internship.
 
 ---
 
-## 📌 Week 1 & Week 2 Objectives & Deliverables Completed
+## 📌 Progress & Deliverables Completed
 
 ### Week 1: Ingestion & Data Cleaning
-- **Environment & Setup Verification:** Configured dependencies (`pandas`, `tqdm`, `datasets`, `pytest`).
-- **Data Acquisition:** Ingested **5,100 real-world technical documents** from Wikipedia API across core CS domains.
-- **Data Cleaning & Sanitation:** Sanitized HTML tags, URLs, non-ASCII text, and redundant formatting.
+- **Environment Setup:** Configured dependencies (`pandas`, `tqdm`, `datasets`, `pytest`).
+- **Data Acquisition:** Ingested 5,100 real-world technical documents from Wikipedia API across Computer Science domains.
+- **Data Cleaning:** Sanitized HTML tags, URLs, non-ASCII characters, and noise.
 
-### Week 2: Chunking, Embeddings & Vector DB
-- **Recursive Text Chunking:** Implemented character-recursive chunking strategy (`chunk_size=500`, `chunk_overlap=50`) preserving semantic paragraph structure.
-- **Embedding Generation & Benchmarking:** Generated 384-dimensional dense vectors using `sentence-transformers/all-MiniLM-L6-v2` and logged embedding performance metrics.
-- **ChromaDB Vector Store Setup:** Configured persistent ChromaDB vector store (`data/vector_db`) handling edge cases (duplicate deletion, micro-chunks filtering).
-- **Retrieval Performance & Latency Testing:** Developed `src/test_retrieval.py` benchmarking script measuring query execution speeds across various query types.
-- **Unit Testing:** Verified recursive splitting edge cases via `pytest` suite.
+### Week 2: Chunking, Embeddings & Vector Store
+- **Recursive Text Chunking:** Implemented character-recursive chunking (`chunk_size=500`, `chunk_overlap=50`).
+- **Embedding Generation:** Leveraged `sentence-transformers/all-MiniLM-L6-v2` for 384-dimensional dense embeddings.
+- **ChromaDB Vector Store:** Set up persistent vector storage (`data/vector_db`) with edge-case handling.
+- **Retrieval Testing:** Benchmarked semantic search latency across multiple query profiles.
+
+### Week 3: LLM Integration, Prompt Engineering & Guardrails
+- **OpenRouter API Integration:** Connected OpenRouter LLM endpoints for context-grounded answer generation (`src/llm_client.py`).
+- **Prompt Engineering:** Designed strict system instructions and context injection boundaries (`src/prompt_template.py`).
+- **API Robustness & Error Handling:** Implemented exponential backoff retries handling rate limits (429), timeouts, and token limits (`src/llm_client.py`).
+- **Hallucination & Domain Guardrails:** Built dual-layer filtering to block out-of-domain queries and verify context relevance before generation (`src/guardrails.py`).
+- **End-to-End Latency Logging:** Benchmarked granular pipeline latency (Retrieval vs. Generation vs. Total Pipeline) in `src/rag_pipeline.py`.
 
 ---
 
-## 📊 Week 2 Performance & Benchmarking Summary
+## 📊 Performance & Latency Summary
 
-| Metric / Parameter | Result / Metric Value |
+| Metric / Stage | Benchmark Result |
 | :--- | :--- |
-| **Recursive Chunking Strategy** | `chunk_size=500`, `chunk_overlap=50` |
-| **Embedding Model Used** | `sentence-transformers/all-MiniLM-L6-v2` |
-| **Vector Database Engine** | Persistent `ChromaDB` (`data/vector_db`) |
-| **Total Chunks Vectorized** | ~10,000+ chunks |
-| **Avg Search Retrieval Latency** | **< 15 ms** per query |
+| **Embedding Engine** | `sentence-transformers/all-MiniLM-L6-v2` |
+| **LLM Engine** | OpenRouter API (`google/gemini-2.5-flash`) |
+| **Average Retrieval Latency** | **~30 - 50 ms** |
+| **Average LLM Generation Latency** | **~1500 - 2000 ms** |
+| **Out-of-Domain Filtering** | **100% Intercepted** via Guardrails |
 
 ---
 
-## 📁 Repository Structure
+## 📁 Repository Architecture
 
 ```text
 .
 ├── data/
-│   ├── raw/                # 5,100 raw Wikipedia documents
-│   ├── processed/          # Cleaned dataset (clean_dataset.csv)
-│   └── vector_db/          # Persistent ChromaDB vector database
+│   ├── raw/                # Raw acquired documents
+│   ├── processed/          # Clean dataset (clean_dataset.csv)
+│   └── vector_db/          # Persistent ChromaDB storage
 ├── src/
 │   ├── __init__.py
-│   ├── cleaning.py         # Data cleaning & sanitation pipeline
-│   ├── utils.py            # Environment verification script
-│   ├── vector_store.py     # Recursive chunking & ChromaDB ingestion
-│   └── test_retrieval.py  # Retrieval latency benchmarking script
+│   ├── cleaning.py         # Text cleaning pipeline
+│   ├── utils.py            # Environment setup check
+│   ├── vector_store.py     # Recursive chunking & vector store
+│   ├── llm_client.py       # OpenRouter API client with error retries
+│   ├── prompt_template.py  # System prompt & context injector
+│   ├── guardrails.py       # Hallucination & off-topic filter
+│   ├── rag_pipeline.py     # End-to-end RAG runner & latency logger
+│   └── test_rag.py         # Test suite runner
 ├── tests/
-│   ├── test_cleaning.py    # Unit tests for text cleaning
-│   └── test_chunking.py    # Unit tests for text chunking
-├── fetch_data.py           # Bulk data acquisition script
+│   ├── test_cleaning.py    # Cleaning unit tests
+│   └── test_chunking.py    # Chunking unit tests
+├── .env.example            # Environment template
+├── fetch_data.py           # Data acquisition script
 ├── requirements.txt        # Project dependencies
-└── README.md               # Complete documentation
+└── README.md               # Documentation
