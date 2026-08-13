@@ -4,7 +4,7 @@ Extracts dominant latent themes from technical document corpora.
 """
 
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 
 
@@ -37,17 +37,14 @@ class TechnicalTopicModeler:
         clean_docs = text_series.fillna("").astype(str).tolist()
         doc_term_matrix = self.vectorizer.fit_transform(clean_docs)
         
-        # Fit LDA
         lda_output = self.lda_model.fit_transform(doc_term_matrix)
         feature_names = self.vectorizer.get_feature_names_out()
 
-        # Build human-readable topic labels based on top keywords
         for topic_idx, topic in enumerate(self.lda_model.components_):
             top_features_ind = topic.argsort()[:-self.top_words_count - 1:-1]
             top_words = [feature_names[i] for i in top_features_ind]
             self.topic_labels[topic_idx] = f"Topic_{topic_idx+1}_({', '.join(top_words[:3])})"
 
-        # Assign dominant topic index per document
         dominant_topics = lda_output.argmax(axis=1)
         predicted_labels = [self.topic_labels[idx] for idx in dominant_topics]
 
@@ -61,7 +58,6 @@ def extract_corpus_topics(csv_path="data/processed/clean_dataset.csv"):
     df = pd.read_csv(csv_path)
     modeler = TechnicalTopicModeler(num_topics=5)
     
-    # Target cleaned text column
     target_col = 'clean_text' if 'clean_text' in df.columns else df.columns[-1]
     topic_predictions, topic_map = modeler.fit_and_assign_topics(df[target_col])
     
@@ -74,5 +70,3 @@ if __name__ == "__main__":
     print("--- EXTRACTED TOPIC THEMES ---")
     for k, v in themes.items():
         print(f"ID {k}: {v}")
-    print("\nSample Output with Topic Themes:")
-    print(df_result[['title', 'topic_theme']].head())
