@@ -6,6 +6,11 @@ Built during the **Parallax Labs Internship**.
 
 ---
 
+
+## 🎥 Demo Video & Final Presentation
+* **Live System Demo (Loom):** [Watch End-to-End API Demo](https://www.loom.com/share/f131aa8b71274982824365203dbe4706)
+* **Final Presentation:** [`Presentation.pdf`](/Users/adj/Documents/RAG-Powered-Knowledge-Extraction-System/Presentation.pdf)
+
 ## System Architecture & Workflow
 
 ```mermaid
